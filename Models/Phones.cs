@@ -1,16 +1,12 @@
-// using System;
-// using Newtonsoft.Json;
+using System;
 
-// namespace WebAPI {
-//     [Serializable]
-//     public class Phones {
-//         [JsonProperty("number")]
-//         public string number {get; set; }
+namespace WebAPI
+{
+    public class Phones {
+        public string number {get; set; }
 
-//         [JsonProperty("type")]
-//         public string type {get; set;}
+        public string type {get; set;}
 
-//         [JsonProperty("verified")]
-//         public string verified {get; set;}
-//     }
-// }
+        public DateTime verified {get; set;}
+    }
+}

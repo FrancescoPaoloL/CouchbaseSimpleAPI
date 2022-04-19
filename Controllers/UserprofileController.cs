@@ -4,6 +4,7 @@ using Couchbase;
 using Couchbase.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace WebAPI.Controllers {
     [ApiController]
@@ -23,11 +24,9 @@ namespace WebAPI.Controllers {
 
 
         [HttpGet] 
-        [Route("{Id}")] 
+        [Route("{Id}")]
+        //It works with (for ex): https://localhost:5001/userprofile/userprofile::aahingeffeteness42037
         public async Task<Username> Get(string Id) {
-            Id = "userprofile::aahingeffeteness42037";
-            //Id = "00011b74-12be-4e60-abbf-b1c8b9b40bfe";
-            
             var scope = await _bucket.ScopeAsync("couchify");
 
             // Get default collection object 
@@ -37,6 +36,19 @@ namespace WebAPI.Controllers {
 
             var getResult = await collection.GetAsync(Id); 
             return getResult.ContentAs<Username>(); 
+        }
+
+        [HttpPut]
+        [Route("{username}")]
+        public async Task Put([FromBody]Username username) { 
+            if (username == null) {
+                throw new Exception("Error in input data!");
+            } 
+
+            var scope = await _bucket.ScopeAsync("couchify");
+            var collection = await scope.CollectionAsync("userprofile");
+            
+            await collection.InsertAsync<Username>($"userprofile::{username.username}", username); 
         }
     }
 }
