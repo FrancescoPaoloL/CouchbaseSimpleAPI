@@ -1,13 +1,13 @@
 namespace WebAPI {
     public class Address {       
-        public string city {get; set; } = "warren";
+        public string city {get; set; }
 
-        public string countryCode {get; set;} = "US";
+        public string countryCode {get; set;}
        
-        public string postalCode {get; set;} = "63450";
+        public string postalCode {get; set;}
         
-        public string state {get; set;} = "oregon";
+        public string state {get; set;}
         
-        public string street {get; set;} = "6174 elgin st";
+        public string street {get; set;}
     }
 }

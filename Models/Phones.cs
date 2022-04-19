@@ -1,9 +1,16 @@
-namespace WebAPI {
-    public class Phones {
-        public string number {get; set; } = "(943)-434-3888";
+// using System;
+// using Newtonsoft.Json;
 
-        public string type {get; set;} = "home";
+// namespace WebAPI {
+//     [Serializable]
+//     public class Phones {
+//         [JsonProperty("number")]
+//         public string number {get; set; }
 
-        public string verified {get; set;} = "2015-09-16T07:02:39";
-    }
-}
+//         [JsonProperty("type")]
+//         public string type {get; set;}
+
+//         [JsonProperty("verified")]
+//         public string verified {get; set;}
+//     }
+// }

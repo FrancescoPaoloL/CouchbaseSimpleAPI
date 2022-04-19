@@ -28,8 +28,8 @@ namespace WebAPI {
         [JsonProperty("email")]
         public string email {get; set;}
         
-        [JsonProperty("phones")]
-        public Phones phones {get; set;}
+        // [JsonProperty("phones")]
+        // public Phones phones {get; set;}
 
         [JsonProperty("picture")]
         public Pictures picture {get; set;}
@@ -56,7 +56,7 @@ namespace WebAPI {
         public DateTime updated {get; set;}
 
         public Username(string username, String Title, string FirstName, string LastName, 
-                        DateTime DateOfBirth, List<string> FavoriteGenres, string Email, Phones Phones,
+                        DateTime DateOfBirth, List<string> FavoriteGenres, string Email, //Phones Phones,
                         Pictures Picture, Address Address, string Gender, string Pwd, 
                         string Status, string Type, DateTime Created, DateTime Updated) {
             this.username = username;
@@ -66,7 +66,7 @@ namespace WebAPI {
             this.dateOfBirth = DateOfBirth;
             this.favoriteGenres = FavoriteGenres;
             this.email = Email;
-            this.phones = Phones;
+            //this.phones = Phones;
             this.picture = Picture;
             this.address = Address;
             this.gender = Gender;

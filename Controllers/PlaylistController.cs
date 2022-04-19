@@ -8,16 +8,16 @@ using Microsoft.Extensions.DependencyInjection;
 namespace WebAPI.Controllers {
     [ApiController]
     [Route("[controller]")]
-    public class UsernameController : ControllerBase {
-        private readonly ILogger<UsernameController> _logger;
+    public class PlaylistController : ControllerBase {
+        private readonly ILogger<PlaylistController> _logger;
         private readonly IBucket _bucket;  
 
-        public UsernameController(ILogger<UsernameController> logger) {
+        public PlaylistController(ILogger<PlaylistController> logger) {
             _logger = logger;
         }
 
         [ActivatorUtilitiesConstructor]
-        public UsernameController(INamedBucketProvider bucketProvider) {
+        public PlaylistController(INamedBucketProvider bucketProvider) {
             _bucket = bucketProvider.GetBucketAsync().GetAwaiter().GetResult(); 
         } 
 
@@ -25,10 +25,13 @@ namespace WebAPI.Controllers {
         [HttpGet] 
         [Route("{Id}")] 
         public async Task<Username> Get(string Id) {
-            //Id = "userprofile::aahingeffeteness42037";
+            Id = "playlist::00011b74-12be-4e60-abbf-b1c8b9b40bfe";
+            //Id = "00011b74-12be-4e60-abbf-b1c8b9b40bfe";
+            
+            var scope = await _bucket.ScopeAsync("couchify");
 
             // Get default collection object 
-            var collection = await _bucket.DefaultCollectionAsync(); 
+            var collection = await scope.CollectionAsync("playlist"); //   .DefaultCollectionAsync(); 
 
             // Get single document using KV search 
 
