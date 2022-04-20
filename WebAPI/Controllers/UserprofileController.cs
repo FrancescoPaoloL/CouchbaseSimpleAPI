@@ -26,29 +26,28 @@ namespace WebAPI.Controllers {
         [HttpGet] 
         [Route("{Id}")]
         //It works with (for ex): https://localhost:5001/userprofile/userprofile::aahingeffeteness42037
-        public async Task<Username> Get(string Id) {
+        public async Task<Userprofile> Get(string Id) {
             var scope = await _bucket.ScopeAsync("couchify");
 
             // Get default collection object 
             var collection = await scope.CollectionAsync("userprofile");
 
             // Get single document using KV search 
-
             var getResult = await collection.GetAsync(Id); 
-            return getResult.ContentAs<Username>(); 
+            return getResult.ContentAs<Userprofile>(); 
         }
 
         [HttpPut]
         [Route("{username}")]
-        public async Task Put([FromBody]Username username) { 
-            if (username == null) {
+        public async Task Put([FromBody]Userprofile userprofile) { 
+            if (userprofile == null) {
                 throw new Exception("Error in input data!");
             } 
 
             var scope = await _bucket.ScopeAsync("couchify");
             var collection = await scope.CollectionAsync("userprofile");
             
-            await collection.InsertAsync<Username>($"userprofile::{username.username}", username); 
+            await collection.InsertAsync<Userprofile>($"userprofile::{userprofile.username}", userprofile); 
         }
     }
 }
