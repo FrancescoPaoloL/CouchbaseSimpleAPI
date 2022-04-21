@@ -28,7 +28,8 @@ namespace WebAPI
             });
 
             services.AddCouchbase(Configuration.GetSection("Couchbase"));
-            services.AddCouchbaseBucket<INamedBucketProvider>("couchmusic2"); 
+            services.AddCouchbaseBucket<INamedBucketProvider>("couchmusic2");
+            services.AddTransient<UserprofileRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
