@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace WebAPI {
     [Serializable]
-    public class Userprofile : IDisposable {
+    public class Userprofile {
         public string GetKey(long id) => $"userprofile::{username}"; //ex. userprofile::aahingeffeteness42037
 
         [JsonProperty("username")]
@@ -78,33 +78,5 @@ namespace WebAPI {
             this.created = Created;
             this.updated = Updated;       
         }
-
-        private bool _disposedValue;
-
-        ~Userprofile() => Dispose(false);
-
-        // Public implementation of Dispose pattern callable by consumers.
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        // Protected implementation of Dispose pattern.
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                _disposedValue = true;
-            }
-        }
-
     }
 }
