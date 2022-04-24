@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Couchbase;
 using Couchbase.Core.Exceptions.KeyValue;
 using Couchbase.Extensions.DependencyInjection;
+using Couchbase.Query;
 using Microsoft.Extensions.Configuration;
 
 namespace WebAPI {
@@ -31,103 +33,33 @@ namespace WebAPI {
             }
         }
 
+        /// <summary>
+        /// Return a UserProfile object for the specified username. Because the username is expected
+        /// to be unique to the user and is in fact part of the key, the query should only return one 
+        /// UserProfile object, not a list.
+        /// </summary>
+        /// <param name="username">Username associated to UserProfile</param>
+        /// <returns>UserProfile for given username</returns>
+        /// <exception cref="Exceptions.RepositoryException">Thrown if an error occurs during the query</exception>
+        public async Task<Userprofile> FindUserProfileByUsername(string username) {
+            var query = "SELECT userprofile.* FROM `userprofile` WHERE username = $username";
+            Userprofile user = null;
+            var scope = await GetScope();
+            try {
+                //var result = await scope.QueryAsync<UserProfile>(query, options => options.Parameter("username", username));
+                var result = await scope.QueryAsync<Userprofile>(query, new QueryOptions().Parameter("username", username));
+                if (result?.MetaData.Status == QueryStatus.Success) {
+                    IAsyncEnumerator<Userprofile> e = result.GetAsyncEnumerator();
+                    await e.MoveNextAsync();
+                    user = e.Current;
+                } else {
+                    throw new RepositoryException($"Query Failed: {query}");
+                }
+            } catch (CouchbaseException e) {
+                throw new RepositoryException($"Query Failed: {query}", e);
+            }
+            return user;
+        }
     }
 }
 
-
-
-
-//----
-        // /// <summary>
-        // /// Update an existing instance of the UserProfile in the repository.
-        // /// </summary>
-        // /// <param name="entity">Source entity to be persisted</param>
-        // /// <returns>Reference to the entity that has been persisted</returns>
-        // /// <exception cref="Exceptions.RepositoryException">Thrown if an error occurs during the update</exception>
-        // public async Task<UserProfile> Update(UserProfile entity)
-        // {
-        //     var collection = await GetCollection("userprofile");
-        //     try
-        //     {
-        //         // Perform an asynchronous Get operation
-        //         await collection.ReplaceAsync(entity.GenKey(), entity);
-        //         return entity;
-        //     }
-        //     catch (DocumentNotFoundException ex)
-        //     {
-        //         throw new RepositoryException($"Unable to locate document for key: {entity.GenKey()}", ex);
-        //     }
-        //     catch (CouchbaseException ex)
-        //     {
-        //         throw new RepositoryException("Failure while trying to update UserProfile", ex);
-        //     }
-        // }
-
-        // /// <summary>
-        // /// Return a UserProfile object for the specified username. Because the username is expected
-        // /// to be unique to the user and is in fact part of the key, the query should only return one 
-        // /// UserProfile object, not a list.
-        // /// </summary>
-        // /// <param name="username">Username associated to UserProfile</param>
-        // /// <returns>UserProfile for given username</returns>
-        // /// <exception cref="Exceptions.RepositoryException">Thrown if an error occurs during the query</exception>
-        // public async Task<UserProfile> FindUserProfileByUsername(string username)
-        // {
-        //     var query = "select userprofile.* from `userprofile` where username = $username";
-        //     UserProfile user = null;
-        //     var scope = await GetScope();
-        //     try
-        //     {
-        //         //var result = await scope.QueryAsync<UserProfile>(query, options => options.Parameter("username", username));
-        //         var result = await scope.QueryAsync<UserProfile>(query, new QueryOptions().Parameter("username", username));
-        //         if (result?.MetaData.Status == QueryStatus.Success)
-        //         {
-        //             IAsyncEnumerator<UserProfile> e = result.GetAsyncEnumerator();
-        //             await e.MoveNextAsync();
-        //             user = e.Current;
-        //         }
-        //         else
-        //         {
-        //             throw new RepositoryException($"Query Failed: {query}");
-        //         }
-        //     }
-        //     catch (CouchbaseException e)
-        //     {
-        //         throw new RepositoryException($"Query Failed: {query}", e);
-        //     }
-        //     return user;
-        // }
-
-        // /// <summary>
-        // /// Given an entity provided, which will be used to update the UserProfile,
-        // /// get the existing entry for the purposes of obtaining the current CAS value.
-        // /// Then, attempt to make an update, allowing for potential other writers
-        // /// </summary>
-        // /// <param name="key">Key for UserProfile entry to update</param>
-        // /// <param name="password">Password to replace (yes, it should be properly hashed)</param>
-        // /// <returns>The updated UserProfile value</returns>
-        // /// <exception cref="Exceptions.RepositoryException">Thrown if update using Optimistic Lock fails</exception>
-        // public async Task<UserProfile> UpdatePasswordWithOptimisticLock(string key, string password)
-        // {
-        //     var collection = await GetCollection("userprofile");
-        //     var maxTries = 5;
-        //     for (var i = 0; i < maxTries; i++)
-        //     {
-        //         var getResult = await collection.GetAsync(key);
-        //         UserProfile user = getResult.ContentAs<UserProfile>();
-        //         var originalCas = getResult.Cas;
-        //         user.Pwd = password;
-
-        //         try
-        //         {
-        //             await collection.ReplaceAsync(key, user, opts => opts.Cas(originalCas));
-        //             return user;
-        //         }
-        //         catch (CasMismatchException)
-        //         {
-        //             Thread.Sleep(1000);
-        //         }
-        //     }
-        //     throw new RepositoryException("Failed to update entity with optimistic locking");
-
-        // }
