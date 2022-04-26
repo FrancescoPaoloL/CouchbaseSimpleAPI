@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace WebAPI.Tests
-{
+namespace WebAPI.Tests {
     public class ConnectionTest {
         private CBConnectionManager _sut;
 
         [Fact]
+        [Trait("Category","IntegrationTest")]
         public async Task ConnectionManager_ConnectionSuccess() {
             _sut = new CBConnectionManager();
             var cluster = await _sut.GetCouchbaseConnection();
@@ -15,6 +15,7 @@ namespace WebAPI.Tests
         }
 
         [Fact]
+        [Trait("Category","IntegrationTest")]
         public async Task ConnectionManager_BucketSuccess() {
             _sut = new CBConnectionManager();
             var cluster = await _sut.GetCouchbaseConnection();

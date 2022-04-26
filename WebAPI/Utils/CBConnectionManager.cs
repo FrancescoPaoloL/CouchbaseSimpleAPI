@@ -4,7 +4,7 @@ using Couchbase;
 using Microsoft.Extensions.Configuration;
 
 namespace WebAPI {
-    public class CBConnectionManager {
+    public class CBConnectionManager: ICBConnectionManager {
         private IConfiguration AppSetting { get; }
         private string ConnectionString;
         private string Username;

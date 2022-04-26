@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace WebAPI {
-    [Serializable]
     public class Userprofile {
-        public string GetKey(long id) => $"userprofile::{username}"; //ex. userprofile::aahingeffeteness42037
-
+        #region properties
         [JsonProperty("username")]
         public string username {get; set;}
 
@@ -54,9 +52,9 @@ namespace WebAPI {
 
         [JsonProperty("updated")]
         public DateTime updated {get; set;}
+        #endregion properties
 
-        public Userprofile() {}
-
+        #region ctor
         public Userprofile(string username, String Title, string FirstName, string LastName, 
                            DateTime DateOfBirth, List<string> FavoriteGenres, string Email, List<Phones> Phones,
                            Pictures Picture, Address Address, string Gender, string Pwd, 
@@ -76,7 +74,23 @@ namespace WebAPI {
             this.status = Status;
             this.type = Type;
             this.created = Created;
-            this.updated = Updated;       
+            this.updated = Updated;  
         }
+        #endregion ctor
+
+        #region methods
+        public string GetKey(long id) => $"userprofile::{username}";
+
+        public String GenKey() {
+            if (type != null && username != null)
+                return type + "::" + username;
+            throw new Exception("Both type and username must be set");
+        }
+
+        public override string ToString() {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
+        #endregion methods
     }
 }
+

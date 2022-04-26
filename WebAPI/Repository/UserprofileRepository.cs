@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Couchbase;
@@ -59,6 +60,46 @@ namespace WebAPI {
                 throw new RepositoryException($"Query Failed: {query}", e);
             }
             return user;
+        }
+
+
+
+        /// <summary>
+        /// ???
+        /// </summary>
+        /// <param name="???">???/param>
+        /// <returns>???</returns>
+        /// <exception cref="???">???</exception>
+        public async Task<Userprofile> InsertUserprofile(Userprofile user){
+            var bucket = await base.couchmusicBucketProvider.GetBucketAsync();
+            var scope = bucket.Scope("couchify");
+            var collection = scope.Collection("userprofile");
+            try {
+                string key = user.GenKey();
+                //TODO: check if already exists             
+                await collection.InsertAsync(key, user);
+                return user;
+            } catch (CouchbaseException ex) {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// ???
+        /// </summary>
+        /// <param name="???">???/param>
+        /// <returns>???</returns>
+        /// <exception cref="???">???</exception>
+        public async Task DeleteUserKey(string username) {
+            var bucket = await base.couchmusicBucketProvider.GetBucketAsync();
+            var scope = bucket.Scope("couchify");
+            var collection = scope.Collection("userprofile");
+
+            try {
+                await collection.RemoveAsync($"userprofile::{username}");
+            } catch (DocumentNotFoundException) {
+                // Do nothing as the document just doesn't exist yet.
+            }
         }
     }
 }

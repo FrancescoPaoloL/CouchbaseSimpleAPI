@@ -9,13 +9,13 @@ namespace WebAPI {
     /// <summary>
     /// Base class containing common functionality used by all the repository classes
     /// </summary>
-    public class RepositoryBase {
-        private readonly INamedBucketProvider _couchmusicBucketProvider;
+    public class RepositoryBase : IRepositoryBase {
+        public readonly INamedBucketProvider couchmusicBucketProvider;
         private readonly string _scopeName;
 
 
         public RepositoryBase(IConfiguration config, INamedBucketProvider bucketProvider) {
-            _couchmusicBucketProvider = bucketProvider;
+            couchmusicBucketProvider = bucketProvider;
             // Fetch the ScopeName property from the Couchbase section of the appconig.json file
             _scopeName = config["Couchbase:ScopeName"];
         }
@@ -27,7 +27,7 @@ namespace WebAPI {
         /// <exception cref="Exceptions.RepositoryException">Thrown if BucketProvider fails to return a valid bucket reference</exception>
         public async Task<IBucket> GetBucket() {
             try {
-                return await _couchmusicBucketProvider.GetBucketAsync();
+                return await couchmusicBucketProvider.GetBucketAsync();
             } catch (CouchbaseException ex) {
                 throw new RepositoryException("Failed to obtain bucket.", ex);
             }

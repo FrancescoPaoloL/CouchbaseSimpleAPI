@@ -1,14 +1,15 @@
 using Couchbase.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
 
 namespace WebAPI.Tests {
-    [Collection("Sequential")]
+    [TestCaseOrderer("WebAPI.Tests.PriorityOrderer", "WebAPI.Tests")]
     public class UserprofileTest : TestBase {
         private readonly UserprofileRepository _sut;
+        private readonly string _username = "aurorasmith42037";
 
         public UserprofileTest(INamedBucketProvider namedBucketProvider, UserprofileRepository userProfileRepository) : base(namedBucketProvider) {
             var config = new ConfigurationBuilder()
@@ -18,38 +19,35 @@ namespace WebAPI.Tests {
                  optional: false,
                  reloadOnChange: true)
            .Build();
-            _sut = new UserprofileRepository(config, namedBucketProvider);
+           _sut = new UserprofileRepository(config, namedBucketProvider);
         }
 
-        [Fact]
+
+        [Fact, TestPriority(0)]
+        [Trait("Category","IntegrationTest")]
+        public async Task Userprofile_Create_Success() {           
+            var user = await Task.Run(() => CreateUsername(_username));
+            user.Should().NotBe(null);
+            await _sut.InsertUserprofile(user);
+        }
+
+
+        [Fact, TestPriority(1)]
+        [Trait("Category","IntegrationTest")]
         public async Task Userprofile_FindById_Success() {
-            Userprofile user = await _sut.FindById("userprofile::aahingeffeteness42037");
-            Assert.NotNull(user);
-            Assert.Equal("Delores", user.firstName);
-            Assert.Equal("Riley", user.lastName);
-            Assert.Equal("Mrs", user.title);
-            Assert.Equal("delores.riley@hotmail.com", user.email);
-            Assert.Equal("aahingeffeteness42037", user.username);
-            Assert.Equal("active", user.status);
-            Assert.Equal(new DateTime(1983, 07, 12), user.dateOfBirth);
-            Assert.Equal("female", user.gender);
-            Assert.Equal("warren", user.address.city);
-            Assert.Equal("US", user.address.countryCode);
-            Assert.Equal("oregon", user.address.state);
-            Assert.Equal("6174 elgin st", user.address.street);
-            Assert.Equal("63450", user.address.postalCode);
-            Assert.Equal("https://randomuser.me/api/portraits/women/88.jpg", user.picture.large);
-            Assert.Equal("(943)-434-3888", user.phones[0].number);
-            Assert.Equal("home", user.phones[0].type);
-            Assert.Equal("Classical Crossover", user.favoriteGenres[0]);
+            var userMock = await Task.Run(() => CreateUsername(_username));
+            Userprofile user = await _sut.FindById($"userprofile::{_username}");
+
+            user.Should().NotBe(null);
+            user.Should().BeOfType<Userprofile>();
+            user.Should().BeEquivalentTo(userMock);
+            
         }
 
-
-        [Fact]
-        public async Task Find_UserProfile_By_Username_Success() {
-            Userprofile user = await _sut.FindUserProfileByUsername("stockadeseffusing18695");
-            Assert.NotNull(user);
-            Assert.Equal("Moreau", user.lastName);
+        [Fact, TestPriority(2)]
+        [Trait("Category","IntegrationTest")]
+        public async Task Delete_UserProfile_By_Username_Success() {
+            await _sut.DeleteUserKey(_username);
         }
     }
 }

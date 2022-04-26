@@ -4,11 +4,10 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 
-namespace WebAPI.Controllers
-{
+namespace WebAPI.Controllers {
     [ApiController]
     [Route("[controller]")]
-    public class UserprofileController : ControllerBase {
+    public class UserprofileController : Controller {
         private readonly ILogger<UserprofileController> _logger;
         private readonly UserprofileRepository _repo;
 
@@ -30,24 +29,3 @@ namespace WebAPI.Controllers
         //...  
     }
 }
-
-
-//----
-        //It works with (for ex): https://localhost:5001/userprofile/userprofile::aahingeffeteness42037
-// [ActivatorUtilitiesConstructor]
-        // public UserprofileController(INamedBucketProvider bucketProvider) {
-        //     _bucket = bucketProvider.GetBucketAsync().GetAwaiter().GetResult(); 
-        // } 
-
-        // [HttpPut]
-        // [Route("{username}")]
-        // public async Task Put([FromBody]Userprofile userprofile) { 
-        //     if (userprofile == null) {
-        //         throw new Exception("Error in input data!");
-        //     } 
-
-        //     var scope = await _bucket.ScopeAsync("couchify");
-        //     var collection = await scope.CollectionAsync("userprofile");
-            
-        //     await collection.InsertAsync<Userprofile>($"userprofile::{userprofile.username}", userprofile); 
-        // }
