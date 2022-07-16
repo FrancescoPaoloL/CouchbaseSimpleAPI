@@ -9,7 +9,7 @@
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
 # Note
-This simple project is base on this <a href="http://e-learning-labs.s3-website-us-west-2.amazonaws.com/cb130cs-lab-instructions/index.html">couchbase lab</a>.
+This simple project is based on this <a href="http://e-learning-labs.s3-website-us-west-2.amazonaws.com/cb130cs-lab-instructions/index.html">couchbase lab</a>.
 
 ## What I used
 * Couchbase Client
@@ -52,7 +52,7 @@ docker exec -t -i 625ac7047fd3 /bin/bash
 
 7. Once it has terminated, press **ctrl-p and ctrl-q** and go to *couchbase web console main page*
 ```
-	http://localhost:8091/ui/index.html
+http://localhost:8091/ui/index.html
 ```
 
 8. Insert "Administrator" + "password" and check if all is properly created.
@@ -68,7 +68,7 @@ docker exec -t -i 625ac7047fd3 /bin/bash
 ## License
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 <hr>
 
