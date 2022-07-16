@@ -28,7 +28,7 @@ namespace WebAPI.Tests {
         public async Task Userprofile_Create_Success() {           
             var user = await Task.Run(() => CreateUsername(_username));
             user.Should().NotBe(null);
-            await _sut.InsertUserprofile(user);
+            (await _sut.InsertUserprofile(user)).Should().NotBe(null);
         }
 
 
@@ -44,7 +44,18 @@ namespace WebAPI.Tests {
             
         }
 
+
         [Fact, TestPriority(2)]
+        [Trait("Category","IntegrationTest")]
+        public async Task Userprofile_Update_Success() {
+            var userMock = await Task.Run(() => CreateUsername(_username));
+            userMock.Should().NotBe(null);
+            userMock.email ="changed@mail.it";
+            (await _sut.UpdateUserprofile(userMock)).Should().NotBe(null);
+        }
+
+
+        [Fact, TestPriority(3)]
         [Trait("Category","IntegrationTest")]
         public async Task Delete_UserProfile_By_Username_Success() {
             await _sut.DeleteUserKey(_username);

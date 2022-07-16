@@ -84,6 +84,27 @@ namespace WebAPI {
             }
         }
 
+
+        /// <summary>
+        /// ???
+        /// </summary>
+        /// <param name="???">???/param>
+        /// <returns>???</returns>
+        /// <exception cref="???">???</exception>
+        public async Task<Userprofile> UpdateUserprofile(Userprofile user){
+            var bucket = await base.couchmusicBucketProvider.GetBucketAsync();
+            var scope = bucket.Scope("couchify");
+            var collection = scope.Collection("userprofile");
+            try {
+                string key = user.GenKey();
+                await collection.UpsertAsync(key, user);
+                return user;
+            } catch (CouchbaseException ex) {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+
         /// <summary>
         /// ???
         /// </summary>
