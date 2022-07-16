@@ -16,7 +16,10 @@ This simple project is base on this <a href="http://e-learning-labs.s3-website-u
 * FluentAssertions
 * Xunit
 
-## Preliminary Setup
+## Preliminary Setup if you want use a docker image
+
+NB: if you under Ubuntu, most probably, you have to use **sudo** for each docker command. We have used: **Docker version: 20.10.17** and **bash version: 4.4.20**.
+
 1. Download and run couchbase docker image
 ```
 docker run -d --name couchmusic -p 8091-8096:8091-8096 \
@@ -24,31 +27,37 @@ docker run -d --name couchmusic -p 8091-8096:8091-8096 \
 registry.gitlab.com/couchbasesamples/couchbase-training:1.5
 ```
 
-2. Once container is created, take note its Id
+3. Once container is created, take note its CONTAINER ID, in this example: *625ac7047fd3*
+```
+docker container ls
 
-3. Copy script... (it copies the entire folder)
-```
-sudo docker cp [IdContainer]/tmp/script ./script
-```
-
-4. ... enter bash
-```
-sudo docker exec -t -i [IdContainer] /bin/bash
+CONTAINER ID   IMAGE                                                         COMMAND                  CREATED          STATUS          PORTS                                                                                                                                                              NAMES
+625ac7047fd3   registry.gitlab.com/couchbasesamples/couchbase-training:1.5   "/entrypoint.sh couc…"   8 seconds ago   Up 6 seconds   0.0.0.0:8091-8096->8091-8096/tcp, :::8091-8096->8091-8096/tcp, 11207/tcp, 0.0.0.0:11210-11211->11210-11211/tcp, :::11210-11211->11210-11211/tcp, 18091-18096/tcp   couchmusic
 ```
 
-5. ... go to folder and run script
+3. Go to *CouchbaseSimpleAPI/src* folder and copy script folder into container
 ```
-#####
+docker cp script/ 625ac7047fd3:/script/
 ```
-6. ... exit crtl-p crtl-q
 
-7. ... go to couchbase web console main page
+4. Enter in bash mode
+```
+docker exec -t -i 625ac7047fd3 /bin/bash
+```
+
+5. Run the script
+```
+./script/runme.sh
+```
+
+7. Once it has terminated, press **ctrl-p and ctrl-q** and go to *couchbase web console main page*
 ```
 	http://localhost:8091/ui/index.html
 ```
 
-8. run tests
+8. Insert "Administrator" + "password" and check if all is properly created.
 
+![Dashboard](./img/dashboard.png)
 
 
 ##  TO DO:
