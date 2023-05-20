@@ -45,7 +45,7 @@ docker cp script/ 625ac7047fd3:/script/
 docker exec -t -i 625ac7047fd3 /bin/bash
 ```
 
-5. Run the script
+5. Run the script (Please wait! 'cause it would take a while!)
 ```
 ./script/runme.sh
 ```
@@ -62,7 +62,7 @@ http://localhost:8091/ui/index.html
 
 ##  TO DO:
 * Complete APIs
-* Add more unit tests
+* Add more tests
 
 
 ## License
