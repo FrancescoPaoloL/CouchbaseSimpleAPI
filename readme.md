@@ -60,6 +60,8 @@ http://localhost:8091/ui/index.html
 ![Dashboard](./img/dashboard.png)
 
 
+Last thing: before doing anything, wait for all the buckets to be green and available!
+
 ##  TO DO:
 * Complete APIs
 * Add more tests
