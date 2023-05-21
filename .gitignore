@@ -134,3 +134,5 @@ $RECYCLE.BIN/
 _NCrunch*
 
 //WebAPI/readme.txt
+
+.sonarqube
